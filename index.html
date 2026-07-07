@@ -12,6 +12,18 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
+        @property --glow-x {
+            syntax: '<percentage>';
+            inherits: false;
+            initial-value: 50%;
+        }
+
+        @property --glow-y {
+            syntax: '<percentage>';
+            inherits: false;
+            initial-value: 50%;
+        }
+
         body {
             font-family: 'JetBrains Mono', monospace;
         }
@@ -27,26 +39,148 @@
         }
 
         .glow {
-            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.04) 0%, transparent 65%);
+            --glow-x: 50%;
+            --glow-y: 50%;
+            background: radial-gradient(
+                circle 27vmax at var(--glow-x) var(--glow-y),
+                rgba(255, 255, 255, 0.045) 0%,
+                transparent 70%
+            );
+            animation: glowPulse 24s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.75; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes glowDrift {
+            0% { --glow-x: 45.2%; --glow-y: 46.4%; }
+            33% { --glow-x: 54.8%; --glow-y: 48.8%; }
+            66% { --glow-x: 47.6%; --glow-y: 54.8%; }
+            100% { --glow-x: 51.2%; --glow-y: 45.2%; }
+        }
+
+        @media (pointer: coarse) {
+            .glow {
+                animation: glowDrift 28s ease-in-out infinite alternate, glowPulse 24s ease-in-out infinite;
+            }
+        }
+
+        .art-accent {
+            color: #a1a1a1;
+            animation: artBreath 1.2s ease-out 0.4s forwards;
+        }
+
+        @keyframes artBreath {
+            0% { color: #ffffff; }
+            100% { color: #a8b4ac; }
+        }
+
+        .group:hover .art-accent {
+            color: #8a9a90;
+        }
+
+        .brand-name {
+            color: #a1a1a1;
+            letter-spacing: -0.02em;
+            transition: color 0.4s ease, letter-spacing 0.4s ease;
+        }
+
+        .brand-name:hover {
+            color: #b2b2b2;
+            letter-spacing: 0.01em;
+        }
+
+        .tagline-word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(8px);
+            animation: taglineIn 0.6s ease-out forwards;
+            animation-delay: var(--delay, 0s);
+        }
+
+        @keyframes taglineIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .glow {
+                --glow-x: 50%;
+                --glow-y: 50%;
+                opacity: 0.85;
+            }
+
+            .tagline-word {
+                opacity: 1;
+                transform: none;
+            }
+
+            .art-accent {
+                color: #a8b4ac;
+            }
         }
     </style>
 </head>
 <body class="bg-neutral-950 text-white min-h-screen selection:bg-white selection:text-black">
 
-    <div class="fixed inset-0 glow pointer-events-none" aria-hidden="true"></div>
+    <div id="glow" class="fixed inset-0 glow pointer-events-none" aria-hidden="true"></div>
 
     <main class="relative min-h-screen flex items-center justify-center px-6">
         <div class="w-full max-w-md text-center space-y-8 fade-in">
 
             <div class="space-y-3">
                 <h1 class="text-5xl md:text-6xl font-medium tracking-tight">
-                    <a href="mailto:reach@anuvarta.com" class="text-[#c0c0c0] hover:text-neutral-300 transition-colors">anuvarta</a>
+                    <a href="mailto:inquiry@anuvarta.com" class="group brand-name">anuv<span class="art-accent">art</span>a</a>
                 </h1>
-                <p class="text-neutral-600 text-xs tracking-widest">systems · infrastructure · tailored</p>
+                <p class="text-[#868686] text-xs tracking-widest">
+                    <span class="tagline-word" style="--delay: 0.4s">systems</span><span class="tagline-word" style="--delay: 0.55s">&nbsp;·&nbsp;</span><span class="tagline-word" style="--delay: 0.7s">infrastructure</span><span class="tagline-word" style="--delay: 0.85s">&nbsp;·&nbsp;</span><span class="tagline-word" style="--delay: 1.0s">adapted</span>
+                </p>
             </div>
 
         </div>
     </main>
+
+    <script>
+        (function () {
+            const glow = document.getElementById('glow');
+            if (!glow) return;
+
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const finePointer = window.matchMedia('(pointer: fine)').matches;
+
+            if (reducedMotion || !finePointer) return;
+
+            glow.style.animation = 'glowPulse 24s ease-in-out infinite';
+
+            let targetX = 50;
+            let targetY = 50;
+            let currentX = 50;
+            let currentY = 50;
+
+            document.addEventListener('mousemove', function (event) {
+                targetX = (event.clientX / window.innerWidth) * 100;
+                targetY = (event.clientY / window.innerHeight) * 100;
+            });
+
+            function tick() {
+                currentX += (targetX - currentX) * 0.05;
+                currentY += (targetY - currentY) * 0.05;
+                glow.style.setProperty('--glow-x', currentX + '%');
+                glow.style.setProperty('--glow-y', currentY + '%');
+                requestAnimationFrame(tick);
+            }
+
+            requestAnimationFrame(tick);
+        }());
+    </script>
 
 </body>
 </html>
