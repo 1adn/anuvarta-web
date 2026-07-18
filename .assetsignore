@@ -1,0 +1,10 @@
+package.json
+package-lock.json
+wrangler.toml
+wrangler.json
+wrangler.jsonc
+*.md
+worker-template.js
+security-headers-worker.js
+.assetsignore
+.gitignore
