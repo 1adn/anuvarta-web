@@ -114,18 +114,6 @@ a:focus-visible {
   border-radius: 2px;
 }
 
-.site-quote {
-  position: fixed;
-  bottom: 6vw;
-  left: 6vw;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 13px;
-  color: var(--text-muted);
-  letter-spacing: 0.02em;
-  margin: 0;
-  z-index: 1;
-}
-
 /* ---------- hero (index) ---------- */
 
 .hero {
@@ -201,6 +189,16 @@ h1 {
   color: var(--accent);
 }
 
+.content p a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.content p a:hover,
+.content p a:focus-visible {
+  color: var(--accent);
+}
+
 .section-block {
   border-top: 1px solid var(--border);
   padding-top: 24px;
@@ -213,6 +211,14 @@ h1 {
   font-weight: 500;
   color: var(--accent);
   margin-bottom: 12px;
+  letter-spacing: 0.02em;
+}
+
+.section-block .label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent);
   letter-spacing: 0.02em;
 }
 
