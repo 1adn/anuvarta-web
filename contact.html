@@ -64,22 +64,24 @@ document.getElementById('contactForm').addEventListener('submit', async (e) => {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
-    // Note: You'll need to create a Cloudflare Worker at /api/contact to handle this
     const response = await fetch('/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     });
+
+    const result = await response.json();
 
     if (response.ok) {
       status.textContent = 'sent! we\'ll get back to you soon.';
       status.style.color = 'var(--accent)';
       form.reset();
     } else {
-      throw new Error('Failed to send');
+      // Show the actual error from the server
+      throw new Error(result.error || 'Unknown error');
     }
   } catch (error) {
-    status.textContent = 'error sending. please email dev@anuvarta.com directly.';
+    status.textContent = `Error: ${error.message}. Please email dev@anuvarta.com directly.`;
     status.style.color = '#e74c3c';
   } finally {
     button.disabled = false;
