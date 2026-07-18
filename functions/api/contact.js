@@ -36,19 +36,30 @@ ${message}
       })
     });
 
+    console.log("Sending request to MailChannels with payload:", JSON.stringify({
+        personalizations: [
+          { to: [{ email: 'dev@anuvarta.com', name: 'anuvarta' }] }
+        ],
+        from: { email: 'dev@anuvarta.com', name: 'anuvarta Contact Form' },
+        reply_to: { email: email, name: name },
+        subject,
+        content: [{ type: 'text/plain', value: textContent }]
+    }));
+
     const mailResponse = await fetch(sendRequest);
     const mailResponseText = await mailResponse.text();
 
+    console.log("MailChannels response status:", mailResponse.status);
+    console.log("MailChannels response headers:", Object.fromEntries(mailResponse.headers.entries()));
+    console.log("MailChannels response body:", mailResponseText);
+
     if (!mailResponse.ok) {
-      console.error("MailChannels error:", mailResponse.status, mailResponseText);
       // Return the actual error for debugging
-      return new Response(JSON.stringify({ error: `MailChannels error: ${mailResponseText}` }), {
+      return new Response(JSON.stringify({ error: `MailChannels error (${mailResponse.status}): ${mailResponseText}` }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
       });
     }
-
-    console.log("Email sent successfully:", mailResponseText);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
