@@ -3,7 +3,6 @@ export async function onRequestPost(context) {
     const data = await context.request.json();
     const { name, email, message } = data;
 
-    // Validate required fields
     if (!name || !email || !message) {
       return new Response(JSON.stringify({ error: "Missing required fields" }), {
         status: 400,
@@ -11,51 +10,25 @@ export async function onRequestPost(context) {
       });
     }
 
-    // Create email content
-    const subject = `New message from ${name} via anuvarta.com`;
-    const textContent = `
-Name: ${name}
-Email: ${email}
-
-Message:
-${message}
-    `.trim();
-
-    // Prepare MailChannels payload
-    const mailPayload = {
-      personalizations: [
-        {
-          to: [{ email: 'dev@anuvarta.com', name: 'anuvarta' }],
-          dkim_domain: 'anuvarta.com',
-          dkim_selector: 'mailchannels',
-          dkim_private_key: context.env.DKIM_PRIVATE_KEY || ''
-        }
-      ],
-      from: { email: 'dev@anuvarta.com', name: 'anuvarta Contact Form' },
-      reply_to: { email: email, name: name },
-      subject,
-      content: [{ type: 'text/plain', value: textContent }]
-    };
-
-    // Use MailChannels with domain lock and DKIM
-    const sendRequest = new Request('https://api.mailchannels.net/tx/v1/send', {
+    const sendRequest = await fetch('https://api.mailchannels.net/tx/v1/send', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(mailPayload)
+      body: JSON.stringify({
+        personalizations: [
+          { to: [{ email: 'dev@anuvarta.com', name: 'anuvarta' }] }
+        ],
+        from: { email: 'noreply@anuvarta.com', name: 'anuvarta Contact Form' },
+        subject: `New message from ${name}`,
+        content: [{
+          type: 'text/plain',
+          value: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+        }]
+      })
     });
 
-    console.log("Sending request to MailChannels with payload:", JSON.stringify({...mailPayload, personalizations: [{...mailPayload.personalizations[0], dkim_private_key: 'REDACTED'}]}));
-
-    const mailResponse = await fetch(sendRequest);
-    const mailResponseText = await mailResponse.text();
-
-    console.log("MailChannels response status:", mailResponse.status);
-    console.log("MailChannels response headers:", Object.fromEntries(mailResponse.headers.entries()));
-    console.log("MailChannels response body:", mailResponseText);
-
-    if (!mailResponse.ok) {
-      // Return the actual error for debugging
-      return new Response(JSON.stringify({ error: `MailChannels error (${mailResponse.status}): ${mailResponseText}` }), {
+    const respText = await sendRequest.text();
+    if (!sendRequest.ok) {
+      return new Response(JSON.stringify({ error: `MailChannels error: ${respText}` }), {
         status: 500,
         headers: { "Content-Type": "application/json" },
       });
@@ -65,9 +38,8 @@ ${message}
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (error) {
-    console.error("Contact form error:", error);
-    return new Response(JSON.stringify({ error: `Error: ${error.message}` }), {
+  } catch (err) {
+    return new Response(JSON.stringify({ error: `Error: ${err.message}` }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });

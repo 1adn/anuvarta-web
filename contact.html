@@ -31,7 +31,7 @@
       your project. or email us directly at <a href="mailto:dev@anuvarta.com">dev@anuvarta.com</a>
     </p>
 
-    <form class="contact-form" action="https://formspree.io/f/mqazkllp" method="POST" id="contactForm">
+    <form class="contact-form" id="contactForm">
       <div class="form-group">
         <label for="name">name</label>
         <input type="text" id="name" name="name" required />
@@ -62,20 +62,22 @@ document.getElementById('contactForm').addEventListener('submit', async (e) => {
 
   try {
     const formData = new FormData(form);
-    const response = await fetch(form.action, {
+    const data = Object.fromEntries(formData.entries());
+
+    const response = await fetch('/api/contact', {
       method: 'POST',
-      body: formData,
-      headers: {
-        'Accept': 'application/json'
-      }
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
     });
+
+    const result = await response.json();
 
     if (response.ok) {
       status.textContent = 'sent! we\'ll get back to you soon.';
       status.style.color = 'var(--accent)';
       form.reset();
     } else {
-      throw new Error('Failed to send');
+      throw new Error(result.error || 'Unknown error');
     }
   } catch (error) {
     status.textContent = `Error: ${error.message}. Please email dev@anuvarta.com directly.`;
