@@ -21,17 +21,18 @@ Message:
 ${message}
     `.trim();
 
-    // Option 1: Use Cloudflare Email Routing (easiest) - requires setup first
-    // Note: You need to set up a "sendmail" route in Cloudflare Email Routing,
-    // or use a service like MailChannels (below)
-
-    // Option 2: Use MailChannels (free for Cloudflare users)
+    // Use MailChannels with proper domain verification
     const sendRequest = new Request("https://api.mailchannels.net/tx/v1/send", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         personalizations: [
-          { to: [{ email: "dev@anuvarta.com", name: "anuvarta" }] },
+          {
+            to: [{ email: "dev@anuvarta.com", name: "anuvarta" }],
+            dkim_domain: "anuvarta.com",
+            dkim_selector: "mailchannels",
+            dkim_private_key: "", // Optional, but TXT record is required
+          },
         ],
         from: { email: "noreply@anuvarta.com", name: "anuvarta Contact Form" },
         subject,
@@ -40,11 +41,18 @@ ${message}
     });
 
     const mailResponse = await fetch(sendRequest);
+    const mailResponseText = await mailResponse.text();
 
     if (!mailResponse.ok) {
-      console.error("MailChannels error:", await mailResponse.text());
-      throw new Error("Failed to send email via MailChannels");
+      console.error("MailChannels error:", mailResponse.status, mailResponseText);
+      // Return the actual error for debugging
+      return new Response(JSON.stringify({ error: `MailChannels error: ${mailResponseText}` }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
     }
+
+    console.log("Email sent successfully:", mailResponseText);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,
@@ -52,7 +60,7 @@ ${message}
     });
   } catch (error) {
     console.error("Contact form error:", error);
-    return new Response(JSON.stringify({ error: "Failed to send message" }), {
+    return new Response(JSON.stringify({ error: `Error: ${error.message}` }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
