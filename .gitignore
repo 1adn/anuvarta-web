@@ -1,4 +1,5 @@
 node_modules/
 .wrangler/
+package-lock.json
 *.key
 dkim_dns_record.txt
