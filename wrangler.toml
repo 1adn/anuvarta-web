@@ -1,7 +1,0 @@
-name = "anuvarta-web"
-compatibility_date = "2026-07-19"
-
-[assets]
-directory = "./public"
-html_handling = "auto-trailing-slash"
-not_found_handling = "404-page"
