@@ -2,9 +2,10 @@
   "name": "anuvarta-web",
   "private": true,
   "scripts": {
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
   },
   "devDependencies": {
-    "wrangler": "^4.24.0"
+    "wrangler": "^4.112.0"
   }
 }
