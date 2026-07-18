@@ -1,178 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="anuvarta — systems and infrastructure built to evolve.">
-    <title>anuvarta</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-    <style>
-        @property --glow-x {
-            syntax: '<percentage>';
-            inherits: false;
-            initial-value: 50%;
-        }
-
-        @property --glow-y {
-            syntax: '<percentage>';
-            inherits: false;
-            initial-value: 50%;
-        }
-
-        body {
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .fade-in {
-            animation: fadeIn 1.2s ease-out forwards;
-            opacity: 0;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .glow {
-            --glow-x: 50%;
-            --glow-y: 50%;
-            background: radial-gradient(
-                circle 6.75vmax at var(--glow-x) var(--glow-y),
-                rgba(255, 255, 255, 0.045) 0%,
-                transparent 70%
-            );
-            animation: glowPulse 24s ease-in-out infinite;
-        }
-
-        @keyframes glowPulse {
-            0%, 100% { opacity: 0.75; }
-            50% { opacity: 1; }
-        }
-
-        @keyframes glowDrift {
-            0% { --glow-x: 45.2%; --glow-y: 46.4%; }
-            33% { --glow-x: 54.8%; --glow-y: 48.8%; }
-            66% { --glow-x: 47.6%; --glow-y: 54.8%; }
-            100% { --glow-x: 51.2%; --glow-y: 45.2%; }
-        }
-
-        @media (pointer: coarse) {
-            .glow {
-                animation: glowDrift 28s ease-in-out infinite alternate, glowPulse 24s ease-in-out infinite;
-            }
-        }
-
-        .brand-name {
-            color: #a1a1a1;
-            letter-spacing: -0.02em;
-        }
-
-        .art-accent {
-            display: inline-block;
-            color: inherit;
-            transition: color 0.3s ease;
-        }
-
-        .brand-name:hover .art-accent {
-            color: #4A5D4F;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .art-accent {
-                transition: none;
-            }
-        }
-
-        .tagline-word {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(8px);
-            animation: taglineIn 0.6s ease-out forwards;
-            animation-delay: var(--delay, 0s);
-        }
-
-        @keyframes taglineIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-
-            .glow {
-                --glow-x: 50%;
-                --glow-y: 50%;
-                opacity: 0.85;
-            }
-
-            .tagline-word {
-                opacity: 1;
-                transform: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>anuvarta — solutions: built for you</title>
+<meta name="description" content="anuvarta designs and builds custom systems and infrastructure for any client. solutions: built for you." />
+<meta property="og:title" content="anuvarta" />
+<meta property="og:description" content="solutions: built for you." />
+<meta property="og:type" content="website" />
+<link rel="canonical" href="https://anuvarta.com/" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%2312151A%22/><text x=%2250%22 y=%2268%22 font-size=%2260%22 text-anchor=%22middle%22 fill=%22%23588157%22 font-family=%22monospace%22>a</text></svg>" />
+<link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-neutral-950 text-white min-h-screen selection:bg-white selection:text-black">
+<body>
 
-    <div id="glow" class="fixed inset-0 glow pointer-events-none" aria-hidden="true"></div>
+  <header class="site-header">
+    <a href="index.html" class="wordmark-group" aria-label="anuvarta home">
+      <span class="wordmark">anuvarta</span>
+    </a>
+    <nav>
+      <a href="about.html">about</a>
+      <a href="contact.html">contact</a>
+    </nav>
+  </header>
 
-    <main class="relative min-h-screen flex items-center justify-center px-6">
-        <div class="w-full max-w-md text-center space-y-8 fade-in">
+  <main class="hero">
+    <p class="tagline">
+      solutions<span class="mark">:</span> built for you<span class="cursor" aria-hidden="true">_</span>
+    </p>
+  </main>
 
-            <div class="space-y-3">
-                <h1 class="text-5xl md:text-6xl font-medium tracking-tight">
-                    <a href="mailto:inquiry@anuvarta.com" class="group brand-name">anuv<span class="art-accent">art</span>a</a>
-                </h1>
-                <p class="text-[#868686] text-xs tracking-widest">
-                    <span class="tagline-word" style="--delay: 0.4s">systems</span><span class="tagline-word" style="--delay: 0.55s">&nbsp;·&nbsp;</span><span class="tagline-word" style="--delay: 0.7s">infrastructure</span><span class="tagline-word" style="--delay: 0.85s">&nbsp;·&nbsp;</span><span class="tagline-word" style="--delay: 1.0s">adapted</span>
-                </p>
-            </div>
-
-        </div>
-    </main>
-
-    <script>
-        (function () {
-            const glow = document.getElementById('glow');
-            if (!glow) return;
-
-            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const finePointer = window.matchMedia('(pointer: fine)').matches;
-
-            if (reducedMotion || !finePointer) return;
-
-            glow.style.animation = 'glowPulse 24s ease-in-out infinite';
-
-            let targetX = 50;
-            let targetY = 50;
-            let currentX = 50;
-            let currentY = 50;
-
-            document.addEventListener('mousemove', function (event) {
-                targetX = (event.clientX / window.innerWidth) * 100;
-                targetY = (event.clientY / window.innerHeight) * 100;
-            });
-
-            function tick() {
-                currentX += (targetX - currentX) * 0.05;
-                currentY += (targetY - currentY) * 0.05;
-                glow.style.setProperty('--glow-x', currentX + '%');
-                glow.style.setProperty('--glow-y', currentY + '%');
-                requestAnimationFrame(tick);
-            }
-
-            requestAnimationFrame(tick);
-        }());
-    </script>
+  <blockquote class="site-quote">let's strive with earnestness</blockquote>
 
 </body>
 </html>
