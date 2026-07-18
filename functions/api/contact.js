@@ -17,7 +17,8 @@ export async function onRequestPost(context) {
         personalizations: [
           { to: [{ email: 'dev@anuvarta.com', name: 'anuvarta' }] }
         ],
-        from: { email: 'noreply@anuvarta.com', name: 'anuvarta Contact Form' },
+        from: { email: 'dev@anuvarta.com', name: 'anuvarta Contact Form' },
+        reply_to: { email: email, name: name },
         subject: `New message from ${name}`,
         content: [{
           type: 'text/plain',
