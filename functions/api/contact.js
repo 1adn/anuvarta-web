@@ -21,18 +21,13 @@ Message:
 ${message}
     `.trim();
 
-    // Use MailChannels with proper domain verification
+    // Use MailChannels with domain lock (we already have the _mailchannels TXT record)
     const sendRequest = new Request("https://api.mailchannels.net/tx/v1/send", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
         personalizations: [
-          {
-            to: [{ email: "dev@anuvarta.com", name: "anuvarta" }],
-            dkim_domain: "anuvarta.com",
-            dkim_selector: "mailchannels",
-            dkim_private_key: "", // Optional, but TXT record is required
-          },
+          { to: [{ email: "dev@anuvarta.com", name: "anuvarta" }] },
         ],
         from: { email: "noreply@anuvarta.com", name: "anuvarta Contact Form" },
         subject,
