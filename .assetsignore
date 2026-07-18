@@ -1,9 +1,0 @@
-package.json
-package-lock.json
-wrangler.toml
-wrangler.json
-wrangler.jsonc
-*.md
-node_modules
-.assetsignore
-.gitignore
