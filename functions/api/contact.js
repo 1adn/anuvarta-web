@@ -22,17 +22,18 @@ ${message}
     `.trim();
 
     // Use MailChannels with domain lock (we already have the _mailchannels TXT record)
-    const sendRequest = new Request("https://api.mailchannels.net/tx/v1/send", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
+    const sendRequest = new Request('https://api.mailchannels.net/tx/v1/send', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         personalizations: [
-          { to: [{ email: "dev@anuvarta.com", name: "anuvarta" }] },
+          { to: [{ email: 'dev@anuvarta.com', name: 'anuvarta' }] }
         ],
-        from: { email: "noreply@anuvarta.com", name: "anuvarta Contact Form" },
+        from: { email: 'dev@anuvarta.com', name: 'anuvarta Contact Form' },
+        reply_to: { email: email, name: name },
         subject,
-        content: [{ type: "text/plain", value: textContent }],
-      }),
+        content: [{ type: 'text/plain', value: textContent }]
+      })
     });
 
     const mailResponse = await fetch(sendRequest);
