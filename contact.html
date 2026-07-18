@@ -45,46 +45,20 @@
         <textarea id="message" name="message" rows="5" required></textarea>
       </div>
       <button type="submit">send</button>
-      <p class="form-status" id="formStatus"></p>
     </form>
 
   </main>
 
 <script>
-document.getElementById('contactForm').addEventListener('submit', async (e) => {
+document.getElementById('contactForm').addEventListener('submit', (e) => {
   e.preventDefault();
-  const form = e.target;
-  const status = document.getElementById('formStatus');
-  const button = form.querySelector('button');
-
-  button.disabled = true;
-  status.textContent = 'sending...';
-
-  try {
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    const response = await fetch('/api/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      status.textContent = 'sent! we\'ll get back to you soon.';
-      status.style.color = 'var(--accent)';
-      form.reset();
-    } else {
-      throw new Error(result.error || 'Unknown error');
-    }
-  } catch (error) {
-    status.textContent = `Error: ${error.message}. Please email dev@anuvarta.com directly.`;
-    status.style.color = '#e74c3c';
-  } finally {
-    button.disabled = false;
-  }
+  const formData = new FormData(e.target);
+  const name = formData.get('name');
+  const email = formData.get('email');
+  const message = formData.get('message');
+  const subject = encodeURIComponent(`New message from ${name}`);
+  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+  window.location.href = `mailto:dev@anuvarta.com?subject=${subject}&body=${body}`;
 });
 </script>
 
