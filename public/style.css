@@ -118,7 +118,7 @@ a:focus-visible {
 .tagline {
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 320;
-  font-size: clamp(8px, 2vw, 16px);
+  font-size: clamp(12px, 2.8vw, 16px);
   line-height: 1.15;
   letter-spacing: -0.01em;
   max-width: 900px;
@@ -221,7 +221,7 @@ h1 {
 
 .tag {
   font-family: 'IBM Plex Mono', monospace;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
   letter-spacing: 0.08em;
   margin-bottom: 10px;
