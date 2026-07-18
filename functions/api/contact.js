@@ -21,30 +21,30 @@ Message:
 ${message}
     `.trim();
 
-    // Use MailChannels with domain lock (we already have the _mailchannels TXT record)
+    // Prepare MailChannels payload
+    const mailPayload = {
+      personalizations: [
+        {
+          to: [{ email: 'dev@anuvarta.com', name: 'anuvarta' }],
+          dkim_domain: 'anuvarta.com',
+          dkim_selector: 'mailchannels',
+          dkim_private_key: context.env.DKIM_PRIVATE_KEY || ''
+        }
+      ],
+      from: { email: 'dev@anuvarta.com', name: 'anuvarta Contact Form' },
+      reply_to: { email: email, name: name },
+      subject,
+      content: [{ type: 'text/plain', value: textContent }]
+    };
+
+    // Use MailChannels with domain lock and DKIM
     const sendRequest = new Request('https://api.mailchannels.net/tx/v1/send', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        personalizations: [
-          { to: [{ email: 'dev@anuvarta.com', name: 'anuvarta' }] }
-        ],
-        from: { email: 'dev@anuvarta.com', name: 'anuvarta Contact Form' },
-        reply_to: { email: email, name: name },
-        subject,
-        content: [{ type: 'text/plain', value: textContent }]
-      })
+      body: JSON.stringify(mailPayload)
     });
 
-    console.log("Sending request to MailChannels with payload:", JSON.stringify({
-        personalizations: [
-          { to: [{ email: 'dev@anuvarta.com', name: 'anuvarta' }] }
-        ],
-        from: { email: 'dev@anuvarta.com', name: 'anuvarta Contact Form' },
-        reply_to: { email: email, name: name },
-        subject,
-        content: [{ type: 'text/plain', value: textContent }]
-    }));
+    console.log("Sending request to MailChannels with payload:", JSON.stringify({...mailPayload, personalizations: [{...mailPayload.personalizations[0], dkim_private_key: 'REDACTED'}]}));
 
     const mailResponse = await fetch(sendRequest);
     const mailResponseText = await mailResponse.text();

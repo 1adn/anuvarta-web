@@ -1,2 +1,4 @@
 node_modules/
 .wrangler/
+*.key
+dkim_dns_record.txt
