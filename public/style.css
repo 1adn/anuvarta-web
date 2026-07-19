@@ -147,7 +147,7 @@ a:focus-visible {
 
 .content {
   max-width: 720px;
-  padding: 4vw 6vw 8vw 6vw;
+  padding: 10vw 6vw 8vw 6vw;
   position: relative;
   z-index: 1;
 }
