@@ -267,7 +267,7 @@ h1 {
   }
 
   .tagline {
-    font-size: clamp(240px, 56vw, 320px);
+    font-size: clamp(216px, 50.4vw, 288px);
     white-space: normal;
   }
 }
