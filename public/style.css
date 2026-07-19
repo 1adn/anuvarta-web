@@ -106,8 +106,14 @@ a:focus-visible {
 
 /* ---------- hero (index) ---------- */
 
+.home {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+}
+
 .hero {
-  min-height: calc(100vh - 220px);
+  flex: 1;
   display: flex;
   align-items: center;
   padding: 0 6vw;
@@ -115,39 +121,20 @@ a:focus-visible {
   z-index: 1;
 }
 
-.tagline {
+.hero-yaml {
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 400;
   font-size: clamp(14px, 2.8vw, 18px);
-  line-height: 1.35;
+  line-height: 2.4;
   letter-spacing: 0.02em;
-  max-width: 900px;
-  white-space: nowrap;
+  color: var(--text-primary);
+  max-width: 720px;
+  white-space: pre-wrap;
+  margin: 0;
 }
 
-.tagline .mark { color: var(--accent); }
-
-.tagline-rest {
-  display: inline;
-}
-
-.cursor {
-  display: inline-block;
-  width: 0.55em;
-  height: 1.05em;
-  margin-left: 0.2em;
-  background: var(--accent);
-  vertical-align: -0.12em;
-  animation: blink 1.05s step-end infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cursor { animation: none; opacity: 1; }
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+.hero-yaml .yaml-comment {
+  color: var(--text-muted);
 }
 
 /* ---------- content pages (about / work) ---------- */
@@ -273,12 +260,7 @@ h1 {
     flex-shrink: 0;
   }
 
-  .tagline {
-    font-size: 32px;
-    white-space: normal;
-  }
-
-  .tagline-rest {
-    display: block;
+  .hero-yaml {
+    font-size: 15px;
   }
 }
