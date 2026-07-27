@@ -78,6 +78,17 @@ nav a {
   transition: color 0.15s ease;
 }
 
+nav a.nav-active {
+  color: var(--text-primary);
+  pointer-events: none;
+}
+
+nav a.nav-active::before {
+  content: "/";
+  color: var(--accent);
+  margin-right: -1px;
+}
+
 nav a:hover, nav a:focus-visible {
   color: var(--accent);
 }

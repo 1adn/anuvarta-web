@@ -1,0 +1,55 @@
+# Static site for anuvarta.com
+DirectoryIndex index.html
+
+# Custom 404
+ErrorDocument 404 /404.html
+
+# Disable directory listing
+Options -Indexes
+
+# Enable URL rewriting for clean URLs (/about -> /about.html)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # If a .html file exists for the path, serve it
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}\.html -f
+  RewriteRule ^(.*)$ $1\.html [L]
+</IfModule>
+
+# HTML — short cache (content changes more often)
+<FilesMatch "\.html$">
+  Header set Cache-Control "public, max-age=86400"
+</FilesMatch>
+
+# CSS / fonts / SVG — long cache; bump ?v= on CSS when stylesheet changes
+<FilesMatch "\.(css|woff2|svg)$">
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# Fonts specific CORS
+<FilesMatch "\.woff2$">
+  Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+# OG image
+<FilesMatch "\.(png|jpg|jpeg|webp)$">
+  Header set Cache-Control "public, max-age=604800"
+</FilesMatch>
+
+# Security headers (LiteSpeed/Apache; CF may also set some)
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header always set X-Frame-Options "DENY"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  # 'self' covers same-origin /cdn-cgi/ email-decode; Insights keeplisted for CF analytics
+  Header always set Content-Security-Policy "default-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; script-src 'self' https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+  Header always set Link "</fonts/ibm-plex-mono-400.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </fonts/ibm-plex-mono-500.woff2>; rel=preload; as=font; type=font/woff2; crossorigin"
+</IfModule>
+
+# Remove server signature
+ServerSignature Off
